@@ -1,0 +1,23 @@
+/* Structure principale du html css */
+html {
+    height: 100%;
+    /* border: solid; */
+}
+
+body {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(5, 1fr);
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+
+
+canvas {
+    border: solid;
+    grid-area: 1 / 2 / 6 / 3; 
+}
