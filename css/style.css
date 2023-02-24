@@ -5,6 +5,7 @@ html {
 }
 
 body {
+    background:linear-gradient(135deg, #622774 0%,#c53364 100%);;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(5, 1fr);
@@ -17,7 +18,38 @@ body {
 
 
 
-canvas {
+.canvas1 {
     border: solid;
     grid-area: 1 / 2 / 6 / 3; 
+    position: relative
+}
+
+.canvas2 {
+    border: solid;
+    position: relative;
+    left: 900px;
+    top: 50px;
+}
+
+.gameOver {
+    display: none;
+    position: absolute;
+    color: black;
+    top: 35%;
+    right: 42%;
+    font-size: 60px;
+
+}
+.point{
+    display:flex;
+    justify-content: flex-end;
+    align-items: center;
+    position: relative; 
+    right: 730px;
+    top: 50px; 
+    width: 200px;
+    height: 80px;
+    font-size: 40px;
+    border: solid black;
+    background-color: white;
 }
