@@ -2,7 +2,7 @@
 
 
 Étudier canvas au travers de la création d'un jeu Tetris tel était l'objectif de ce projet. 
-Après avoir réaliser le tutoriel de Casse Bric de la documentation MDN je considérais avoir 
+Après avoir réalisé le tutoriel de Casse Bric de la documentation MDN je considérais avoir 
 assez de connaissance pour réaliser le tetris en partant de rien. 
 
 La grande difficulté de ce projet était la rotation des matrices binaires pour faire pivoter les élements.
