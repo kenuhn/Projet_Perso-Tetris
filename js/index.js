@@ -1,8 +1,8 @@
 export default () => {
   const canvasPrincipal = document.querySelector(".canvas1");
   const ctx = canvasPrincipal.getContext("2d");
-/*   const canvasSecondaire = document.querySelector(".canvas2")
-  const ctx2 = canvasSecondaire.getContext("2d"); */
+  const canvasSecondaire = document.querySelector(".canvas2");
+  const ctx2 = canvasSecondaire.getContext("2d");
   const plateauLongueur = canvasPrincipal.width;
   const plateauHauteur = canvasPrincipal.height;
   const carreauWidth = 40;
@@ -48,12 +48,17 @@ export default () => {
   ];
 
   class Tetriminos {
-    constructor(piece) {
+    constructor(piece, couleur) {
       this.forme = piece;
       this.positionX = positionX;
       this.positionY = positionY;
-      this.couleur = this.creeCouleur(this.forme);
-      this.premierDessein = this.dessineTetriminos(this.forme, this.positionX, this.positionY, this.couleur)
+      this.couleur = couleur;
+      this.premierDessein = this.dessineTetriminos(
+        this.forme,
+        this.positionX,
+        this.positionY,
+        this.couleur
+      );
     }
     deplacement(e) {
       if (
@@ -143,7 +148,6 @@ export default () => {
     dessineTetriminos(forme, positionX, positionY, couleur) {
       let matrice = forme;
       let formePositionY = positionY;
-      console.log(this.couleur);
       for (let i = 0; i < matrice.length; i++) {
         let formePositionX = positionX;
         if (matrice[i].includes(1)) {
@@ -165,38 +169,6 @@ export default () => {
           }
         }
       }
-    }
-
-    creeCouleur(forme) {
-      let couleur = null;
-      switch (forme) {
-        case TetriminoS:
-          couleur = "red";
-          break;
-        case TetriminoZ:
-          couleur = "blue";
-          break;
-        case TetriminoL:
-          couleur = "yellow";
-          break;
-        case TetriminoJ:
-          couleur = "green";
-          break;
-        case TetriminoT:
-          couleur = "grey";
-          break;
-        case TetriminoO:
-          couleur = "pink";
-          break;
-        case TetriminoI:
-          couleur = "orange";
-          break;
-
-        default:
-          console.log("Erreur couleur ");
-      }
-      console.log(couleur);
-      return couleur;
     }
 
     suprimeTetriminos(forme, positionX, positionY) {
@@ -316,8 +288,8 @@ export default () => {
         }
       }
       if (
-        this.checkLeft(top, this.positionX, this.positionY) === false ||
-        this.checkRight(top, this.positionX, this.positionY) === false ||
+         this.checkLeft(top, this.positionX, this.positionY) === false ||
+        this.checkRight(top, this.positionX, this.positionY) === false || 
         this.checkBottom(top, this.positionX, this.positionY) === false
       ) {
         return false;
@@ -366,48 +338,88 @@ export default () => {
 
   class Interface {
     constructor() {
-      this.tetriminos = new Tetriminos(this.newPiece());
-      /* this.futureTetriminos = this.newPiece() */
-      /* this.dessineFutureTetriminos( this.futureTetriminos) */
-      this.supprimeRange = setInterval(this.suprimeRange.bind(this), 800);
-      this.TetriminosInterval = setInterval(
-        this.gameLoop.bind(this),
-        800
+      this.forme = this.newPiece();
+      this.newCouleur = this.creeCouleur(this.forme);
+      this.tetriminos = new Tetriminos(this.forme, this.newCouleur);
+      this.futureForme = this.newPiece();
+      console.log(this.futureForme);
+      this.dessineFutureTetriminos(
+        this.futureForme,
+        this.creeCouleur(this.futureForme)
       );
-      this.checkTop = setInterval( this.checkTop.bind(this), 800);
+
+      this.supprimeRange = setInterval(this.suprimeRange.bind(this), 800);
+      this.TetriminosInterval = setInterval(this.gameLoop.bind(this), 800);
+      this.checkTop = setInterval(this.checkTop.bind(this), 800);
       document.addEventListener("keydown", (e) => {
         this.tetriminos.deplacement(e);
       });
     }
 
-
-
     gameLoop() {
       if (this.tetriminos.vaBas() === false) {
-        this.ajoutePoint(20)
+        this.ajoutePoint(20);
         this.tetriminos.destroy();
-        this.tetriminos = new Tetriminos(this.newPiece());
-      /*   this.futureTetriminos = this.newPiece() */
-      /*   console.log(ctx2)
-        this.dessineFutureTetriminos( this.futureTetriminos) */
-      } 
+        this.tetriminos = new Tetriminos(
+          this.futureForme,
+          this.creeCouleur(this.futureForme)
+        );
+        this.futureForme = this.newPiece();
+
+        this.dessineFutureTetriminos(
+          this.futureForme,
+          this.creeCouleur(this.futureForme)
+        );
+      }
+    }
+    creeCouleur(forme) {
+      let couleur = null;
+      switch (forme) {
+        case TetriminoS:
+          couleur = "red";
+          break;
+        case TetriminoZ:
+          couleur = "blue";
+          break;
+        case TetriminoL:
+          couleur = "yellow";
+          break;
+        case TetriminoJ:
+          couleur = "green";
+          break;
+        case TetriminoT:
+          couleur = "grey";
+          break;
+        case TetriminoO:
+          couleur = "pink";
+          break;
+        case TetriminoI:
+          couleur = "orange";
+          break;
+
+        default:
+          console.log("Erreur couleur ");
+      }
+      return couleur;
     }
 
     gameOver() {
-    let finPartie = document.querySelector('.gameOver')
-    clearInterval(this.supprimeRange);
-    clearInterval(this.TetriminosInterval);  
-    clearInterval(this.checkTop)      
-     return  finPartie.style.display = "block"
+      let finPartie = document.querySelector(".gameOver");
+      clearInterval(this.supprimeRange);
+      clearInterval(this.TetriminosInterval);
+      clearInterval(this.checkTop);
+      return (finPartie.style.display = "block");
+    }
+
+    newPartie () {
+
     }
 
     checkTop() {
-      
       tabCoordonnee.forEach((tab) => {
         tab.forEach((obj) => {
-         
           if (obj.y === 0) {
-            this.gameOver()
+            this.gameOver();
           }
         });
       });
@@ -420,7 +432,7 @@ export default () => {
 
     ajoutePoint(nombre) {
       point += nombre;
-      let elPoint = document.querySelector('.point');
+      let elPoint = document.querySelector(".point");
       elPoint.innerHTML = point + ":Point";
     }
 
@@ -453,13 +465,12 @@ export default () => {
         let finTab = []; //chaque tableau de propriété ayant les mêmes coordoonés y
         newTab.forEach((obj) => {
           if (el.y === obj.y) {
-            console.log("rangé mise");
             finTab.push(obj);
           }
         });
         if (finTab.length === 10) {
           console.log("rangé complété");
-          this.ajoutePoint(40)
+          this.ajoutePoint(40);
           let rangerASupprime;
           finTab.forEach((el) => {
             tableauRempli.push(el);
@@ -498,33 +509,36 @@ export default () => {
         }
       });
     }
-  /*   dessineFutureTetriminos(forme) {
-      ctx2.clearRect(0,0, 80, 80)
+    dessineFutureTetriminos(forme, couleur) {
+      ctx2.clearRect(0, 0, canvasSecondaire.width, canvasSecondaire.height);
       let matrice = forme;
-      let formePositionY = positionY; 
+      console.log(matrice);
+      let formePositionY = -20;
+
+      // calculer la position de départ de la forme en fonction de la largeur de la forme et la largeur du canvas
+      let formePositionX =
+        canvasSecondaire.width / 2 - (matrice[0].length / 2) * 30;
+
       for (let i = 0; i < matrice.length; i++) {
-        let formePositionX = positionX;
         if (matrice[i].includes(1)) {
-          formePositionY += 80;
+          formePositionY += 30;
         }
         for (let j = 0; j < matrice[i].length; j++) {
-          formePositionX += 80;
           if (matrice[i][j] === 1) {
             ctx2.beginPath();
-            ctx2.rect(
-              115,
-              35,
-              80,
-              80
-            );
-         
+            ctx2.rect(formePositionX + j * 30, formePositionY, 30, 30);
+            ctx2.fillStyle = couleur;
             ctx2.fill();
             ctx2.closePath();
           }
         }
       }
-    } */
+    }
   }
+  document.querySelector('.reload').addEventListener("click", (e) => {
+    console.log(e)
+    location.reload();
 
+  })
   return new Interface();
 };
